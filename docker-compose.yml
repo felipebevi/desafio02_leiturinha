@@ -8,6 +8,7 @@ services:
     container_name: importador_de_produto_app
     volumes:
       - ./app:/var/www
+      - ./csv:/var/www/csv
     ports:
       - "8080:8000"
     depends_on:
