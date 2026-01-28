@@ -44,10 +44,13 @@ docker compose up -d
 # limpar cache de config (importante)
 docker compose exec app php artisan config:clear
 
-# gerar chave
+# gerar chave na primeira execucao
 docker compose exec app php artisan key:generate
 
-# criar tabelas
+```
+
+```bash
+# criar tabelas na primeira execucao
 docker compose exec app php artisan migrate --force
 
 ```
@@ -100,4 +103,5 @@ acrescentando mais um detalhe, isso é um teste de desenvolvimento, varios ponto
 ---
 :-) - Felipe Bevi - 20260128
 ---
+
 
