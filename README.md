@@ -29,7 +29,42 @@ http://localhost:8080
 ## Subindo o projeto
 
 ```bash
+git clone git@github.com:felipebevi/desafio02_leiturinha.git
+cd desafio02_leiturinha
+
+# criar o .env do laravel
+cp app/.env.example app/.env
+
+# instalar dependencias
+docker compose run --rm app composer install
+
+# subir os containers
 docker compose up -d
+
+# limpar cache de config (importante)
+docker compose exec app php artisan config:clear
+
+# gerar chave
+docker compose exec app php artisan key:generate
+
+# criar tabelas
+docker compose exec app php artisan migrate --force
+
+```
+
+```bash
+# conferir arquivos que deseja testar no diretorio /csv
+# executar a importacao com o command do laravel - pode conferir em tempo real os arquivos sendo renomeados pois deixei um sleep(5) (5 segundos) em cada processamento
+docker compose exec app php artisan products:import
+# verificar BD com SH de debug
+./conferir_banco.sh
+# se quiser limpar os CSV para testar de novo
+for f in csv/*.csv.*; do mv "$f" "${f%.csv.*}.csv"; done
+```
+
+```bash
+# fechar e limpar o ambiente e os containeres desse projeto
+docker compose down -v
 ```
 
 ## Estrategia para importação ordenada (indempotencia e concorrencia)
