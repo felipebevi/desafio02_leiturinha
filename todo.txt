@@ -1,0 +1,70 @@
+Desafio 02: Serviço Interno de Importação de
+
+Produtos
+Você deve implementar um worker que roda periodicamente (a cada 10 minutos) e
+importa automaticamente arquivos CSV de uma pasta específica (/imports/products).
+
+Esses arquivos são criados automaticamente por um sistema externo, e podem existir
+centenas de arquivos na pasta.
+
+O worker:roda a cada 10 minutos
+● pode ter várias instâncias rodando em paralelo
+● deve importar os dados de forma segura e idempotente
+
+O objetivo não é criar um sistema completo, mas sim avaliar como você lida com:
+● concorrência
+● duplicidade
+● falhas
+● processamento em lote
+
+Processamento de arquivos
+● Cada arquivo deve ser processado no máximo uma vez
+● O mesmo produto (external_id) pode aparecer em arquivos diferentes
+● Após processar:
+○ sucesso → marcar como processado
+○ erro → permitir reprocessamento futuro
+
+Erros
+● Um erro em uma linha do CSV não deve abortar o arquivo inteiro
+● Erros devem ser registrados
+● O processamento deve continuar quando possível
+
+Você não precisa:
+
+None
+● Criar um scheduler real (cron)
+● Criar migrations completas
+● Criar interface gráfica
+● Criar testes completos (opcional)
+
+Você pode escolher:
+● Como identificar arquivos já processados
+● Como evitar/resolver concorrência
+● Como registrar erros
+● Como estruturar o código
+
+Mas explique suas decisões no README.
+
+O worker deve ser implementado em PHP, de preferência em Laravel v12.
+Você pode usar um banco de dados real via Docker ou pode implementar mock repositories
+- não será avaliada a forma como você armazena os dados, e sim como lida com problemas
+de performance, observabilidade e consistência ao ler e processar o arquivo.
+Pode ser entregue como um arquivo .zip ou um repositório público no Github.
+
+Conteúdo do CSV
+
+Separador: ;
+Header obrigatório
+
+Exemplo:
+external_id;name;price;stock;active
+P123;Produto A;199.90;10;true
+P124;Produto B;59.90;0;false
+P125;Produto C;12.50;100;true
+
+Campos
+● external_id (string, obrigatório, identificador externo)
+● name (string, obrigatório)
+● price (decimal > 0)
+● stock (int>=0)
+● active (true|false)
