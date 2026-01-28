@@ -9,3 +9,6 @@ docker compose exec app php artisan migrate
 
 docker compose exec app php artisan make:model Product
 
+renomear todos csv de volta pra testar de novo
+for f in csv/*.csv.*; do mv "$f" "${f%.csv.*}.csv"; done
+

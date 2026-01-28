@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use App\Models\Product;
+use Symfony\Component\Process\Process;
 
 class ImportarProdutos extends Command
 {
