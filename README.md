@@ -38,6 +38,6 @@ vou renomear o arquivo .csv para .csv.processing, apos o processamento ele volta
 
 para evitar erros na linh, processarei a linha com try catch
 
-para criar o worker no laravel padrao, vou executar com: docker compose exec app php artisan make:command ImportarProdutos
+logs de comandos em /instalacaolaravel.log
 
 

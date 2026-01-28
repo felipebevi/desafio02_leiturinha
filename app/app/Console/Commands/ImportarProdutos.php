@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use App\Models\Product;
 
 class ImportarProdutos extends Command
 {
@@ -31,7 +32,8 @@ class ImportarProdutos extends Command
     private function processFile(string $file): void
     {
         $processingFile = $file . '.processing';
-
+        $successCount = 0;
+        $errorCount   = 0;
 
         // lock do arquivo
         if (!@rename($file, $processingFile)) {
@@ -59,12 +61,12 @@ class ImportarProdutos extends Command
 
             try {
                 $this->processRow($row);
-
+                $successCount++;
                 $lineTime = round((microtime(true) - $lineStart) * 1000, 2);
                 $this->line("Linha {$lineNumber} processada em {$lineTime} ms");
             } catch (\Throwable $e) {
                 $lineTime = round((microtime(true) - $lineStart) * 1000, 2);
-
+                $errorCount++;
                 Log::error('Erro ao processar linha', [
                     'file' => basename($file),
                     'line' => $lineNumber,
@@ -80,9 +82,15 @@ class ImportarProdutos extends Command
         fclose($handle);
 
         $fileTime = round((microtime(true) - $fileStart) * 1000, 2);
-        $this->info("Arquivo finalizado em {$fileTime} ms");
 
-        rename($processingFile, $file . '.done');
+        if ($successCount === 0) {
+            rename($processingFile, $file . '.error');
+            $this->error("Arquivo falhou completamente ({$fileTime} ms)");
+        } else {
+            rename($processingFile, $file . '.done');
+            $this->info("Arquivo finalizado em {$fileTime} ms | OK: {$successCount} | ERRO: {$errorCount}");
+        }
+
     }
 
     private function processRow(array $row): void
@@ -110,8 +118,45 @@ class ImportarProdutos extends Command
             throw new \Exception('linha header ignorada');
         }
 
-        $this->info("Linha OK - external_id: {$externalId}");
+        $externalId = trim($row[0]);
+        $name       = trim($row[1]);
+        $priceRaw   = trim($row[2]);
+        $stockRaw   = trim($row[3]);
+        $activeRaw  = trim($row[4]);
 
-        // OK - gravar no banco
+        if ($name === '') { // podem ter mais validacoes de acordo com a regra de negocio
+            throw new \Exception('Campos obrigatorios ausentes');
+        }
+
+        // normaliza o preco
+        $price = str_replace(',', '.', $priceRaw);
+        if (!is_numeric($price)) {
+            throw new \Exception('Preco invalido');
+        }
+
+        // normaliza o estoque
+        if (!is_numeric($stockRaw)) {
+            throw new \Exception('Stock invalido');
+        }
+        $stock = (int) $stockRaw;
+
+        // normaliza o status aceitando mais de uma variacao para true ou false
+        $active = match (strtolower($activeRaw)) {
+            '1', 'true', 'yes', 'sim' => true,
+            '0', 'false', 'no', 'nao' => false,
+            default => throw new \Exception('Active invalido'),
+        };
+
+        // upsert para a indempondencia
+        Product::updateOrCreate(
+            ['external_id' => $externalId],
+            [
+                'name'   => $name,
+                'price'  => $price,
+                'stock'  => $stock,
+                'active' => $active,
+            ]
+        );
     }
+
 }

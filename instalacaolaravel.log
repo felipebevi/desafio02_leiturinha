@@ -1,2 +1,11 @@
 mkdir app
 docker compose run --rm app composer create-project laravel/laravel .
+
+docker compose exec app php artisan make:command ImportarProdutos
+
+docker compose exec app php artisan make:migration create_products_table
+
+docker compose exec app php artisan migrate
+
+docker compose exec app php artisan make:model Product
+

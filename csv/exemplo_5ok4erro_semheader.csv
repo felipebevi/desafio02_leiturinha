@@ -1,0 +1,8 @@
+P200;Produto OK;10.50;5;true
+P201;Produto Ruim;abc;10;true
+P202;Produto OK 2;5,99;20;yes
+P203;Produto OK estoque negativo;15.00;-3;false
+P204;Produto OK 3;20.00;0;1
+P205;Produto Ruim 3;xyz;xyz;maybe
+P206;Produto OK 4;30.00;15;0
+P207;Produto Ruim 4;;10;true
