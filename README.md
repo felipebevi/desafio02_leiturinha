@@ -46,16 +46,18 @@ docker compose exec app php artisan migrate
 fiz um SH para ver o banco do docker no console e faciliar o debug final
 ./conferir_banco.sh
 
---------------FIM--------------
-
-DOC FINAL COM ANOTACOES
+## DOC FINAL COM ANOTACOES
 
 ---
 Você pode escolher:
-● Como identificar arquivos já processados: os arquivos sao controlados por renomeacao garantindo que cada csv seja processado apenas uma vez
-● Como evitar/resolver concorrência: o uso de renomeacao atomica impede que multiplas instancias processem o mesmo arquivo ao mesmo tempo
-● Como registrar erros: os erros sao tratados e registrados por linha sem interromper o processamento do arquivo inteiro, alem dos logs nativos do laravel
-● Como estruturar o código: o worker foi implementado como um command separado com responsabilidades claras e bem definidas por nao se misturar com interfaces ou outras frentes do projeto como um todo
+
+Como identificar arquivos já processados: os arquivos sao controlados por renomeacao garantindo que cada csv seja processado apenas uma vez
+
+Como evitar/resolver concorrência: o uso de renomeacao atomica impede que multiplas instancias processem o mesmo arquivo ao mesmo tempo
+
+Como registrar erros: os erros sao tratados e registrados por linha sem interromper o processamento do arquivo inteiro, alem dos logs nativos do laravel
+
+Como estruturar o código: o worker foi implementado como um command separado com responsabilidades claras e bem definidas por nao se misturar com interfaces ou outras frentes do projeto como um todo
 
 Mas explique suas decisões no README.
 acrescentando mais um detalhe, isso é um teste de desenvolvimento, varios pontos foram simplificados para melhor entrega e cumprimento dos objetivos principais.
