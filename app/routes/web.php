@@ -3,5 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return response()->json([
+        'status' => 'ok',
+        'message' => 'Hello World! Importador de Produtos :-)'
+    ]);
 });
