@@ -2,7 +2,7 @@
 
 Serviço interno para importação automática de produtos a partir de arquivos CSV
 
-Este README será incrementado ao longo do desenvolvimento
+Este README foi incrementado ao longo do desenvolvimento, e, agora, finalizado ;-)
 
 ---
 
@@ -103,5 +103,6 @@ acrescentando mais um detalhe, isso é um teste de desenvolvimento, varios ponto
 ---
 :-) - Felipe Bevi - 20260128
 ---
+
 
 
